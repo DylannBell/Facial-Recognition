@@ -1,0 +1,46 @@
+N = distinguished classes (number of people)
+pi = number of training images (5 per person)
+i = index 1,2,...,N (the person)
+
+Each gray scale image is of order a x b (118 * 92 for the images we have)
+
+
+Load all the training images
+Process Image()
+For each set of 5 images from ith class stack the vectors (this is called wi) (q * pi)
+Add the wi to the ith index of Xi
+Xi is the class specific model that contains all the training data
+
+
+Testing Phase:
+z is a test image we are trying to recognise.
+y = Process Image(z)
+Represent y as a linear combination of each class
+
+Find BHati for every i (y = Xi*BHati (BHati is in a subset of pi * 1))
+BHati can be estimates using least squares estimation.
+T = transposed
+BHati = (XiT * Xi)^-1 * XiT * y
+
+The estimated vector of paramters Bi, along with the predictors Xi are used to predict the response vector for each class i.
+
+yHati = XiBHati
+yHati = (XiT * Xi)^-1 * XiT * y
+yHati = Hiy
+
+H is called the hat matrix since it maps y onto yHat
+
+We now calculate the distance measure between the predicted response vector yHati and y
+di(y) = some formula in the paper
+
+You then find the minimum di(y) and that is the closest face.
+
+
+
+Process image function:
+	Make the image gray scale if it is not already
+	Downsize the image into c x d (10 * 5 is used in the example)
+	Normalise the image so it's between 0 and 1.
+	Column concatenate the image so it's of size q * 1 (q = cd)
+
+
