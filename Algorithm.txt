@@ -1,23 +1,45 @@
-N = distinguished classes (number of people)
-pi = number of training images (5 per person)
-i = index 1,2,...,N (the person)
+Class = individual person
+N = number of classes (e.g. number of people the algorithm is going to try to recognise)
+i = range from 1....N 
+pi = number of training images (5 per person) for class i
 
-Each gray scale image is of order a x b (118 * 92 for the images we have)
 
+Each gray scale image is of order a x b (118 * 92 for the images we have) - rgb2gray()
 
-Load all the training images
-Process Image()
-For each set of 5 images from ith class stack the vectors (this is called wi) (q * pi)
-Add the wi to the ith index of Xi
-Xi is the class specific model that contains all the training data
+-----------------------------------------------------------------------------------------------------------
+PSEDUO CODE :
+
+For each class
+	Load all the training images
+		For each image	
+			process_image()
+	
+	For all training images
+		Stack the vector representation of these images into a matrix called wi
+	In other words : 
+		For each set of 5 images from ith class stack the vectors (this is called wi) (q * pi)
+		Add the wi to the ith index of Xi
+		Xi is the class specific model that contains all the training data
+
+process_image:
+	Make the image gray scale if it is not already
+	Downsample the image into c x d (10 * 5 is used in the example)
+	Normalise the image so it's between 0 and 1.
+	Column concatenate the image so it's of size q * 1 (q = cd)
+-----------------------------------------------------------------------------------------------------------
+
+NOTE : 
+- That column concatentation is the transformation from the gallery image domain to the image vector domain
+- Everytime we get an image we need to transform it from gallery image -> image vector
+
 
 
 Testing Phase:
-z is a test image we are trying to recognise.
+z is a test image we are trying to recognise against the different classes e.g. given a photo of a person can we correctly identify him/her amongst the training data
 y = Process Image(z)
-Represent y as a linear combination of each class
+IF y belongs to the ith class, it should be represented as a linear combination of the training images from the same class
 
-Find BHati for every i (y = Xi*BHati (BHati is in a subset of pi * 1))
+Find BHati for every i (y = Xi*BHati (BHati is in a subset of pi * 1)) e.g. find B for every class OR find B for every person
 BHati can be estimates using least squares estimation.
 T = transposed
 BHati = (XiT * Xi)^-1 * XiT * y
@@ -37,10 +59,5 @@ You then find the minimum di(y) and that is the closest face.
 
 
 
-Process image function:
-	Make the image gray scale if it is not already
-	Downsize the image into c x d (10 * 5 is used in the example)
-	Normalise the image so it's between 0 and 1.
-	Column concatenate the image so it's of size q * 1 (q = cd)
 
 
