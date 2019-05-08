@@ -53,6 +53,12 @@ for i = 1:num_testing_imgs
     fprintf("This is from class " + index + "\n");
 end
 
+function yhat = find_yhat(img, Xi)
+    % Algorithm to find bhat is (XiT * Xi)^-1 * XiT * y
+    % y = img
+    % yhat = Xi * bhat
+    yhat = Xi * ((transpose(Xi) * Xi)\transpose(Xi) * img);
+end
 
 % Populate training set with face data set
 function training_data = learn_faces(training_data, num_total_imgs, num_training_imgs, num_classes, q, c, d)
@@ -106,9 +112,4 @@ function img = process_img(img, q, c, d)
     img = img / max(img);
 end
 
-function yhat = find_yhat(img, Xi)
-    % Algorithm to find bhat is (XiT * Xi)^-1 * XiT * y
-    % y = img
-    % yhat = Xi * bhat
-    yhat = Xi * ((transpose(Xi) * Xi)\transpose(Xi) * img);
-end
+
