@@ -84,7 +84,7 @@ function training_data = learn_faces(directory_path, training_data, num_total_im
         % Loop through all images and save image paths into an array
         for j = 1:num_total_imgs
             fileName = strcat(num2str(j), '.pgm');
-            path = strcat(directory_path, '\', dir_name, '\', fileName);
+            path = strcat(directory_path, '\', dir_name, '\', fileName)
             image_paths(1, j) = path;
         end
         
@@ -118,7 +118,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     handles = set_constants(handles, hObject);
     
     % open folder selection dialog box and save path
-    directory_path = uigetdir()
+    directory_path = uigetdir();
     
     % determine the no. of classes by counting the number of sub folders in
     % dir
