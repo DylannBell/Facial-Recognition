@@ -98,17 +98,18 @@ function training_data = learn_faces(directory_path, training_data, num_total_im
 function handles = set_constants(handles, hObject)
     keySet = {
                 'num_training_imgs', 
-                'num_classes', 
+                'num_training_classes', 
+                'num_testing_classes',
                 'num_total_imgs',
                 'c',
                 'd',
                 'q'
                };
-    valueSet = {5, 10, 10, 10, 5, 50};
+    valueSet = {5, 10, 10, 10, 10, 5, 50};
     constants = containers.Map(keySet, valueSet);
     handles.constants = constants;  
-    guidata(hObject, handles);
-
+    guidata(hObject, handles);  
+    
 % OPEN DIRECTORY BUTTON
 % Allows users to navigate to some directory where the system will 
 % automatically traverse some expected directory stucture for training and
@@ -118,7 +119,10 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     handles = set_constants(handles, hObject);
     
     % open folder selection dialog box and save path
-    directory_path = uigetdir();
+    testing_directory_path = uigetdir()
+    dir_content = dir(directory_path);
+    num_testing_classes = sum([dir_content.isdir]) - 2;
+    handles.constants('num_testing_classes') = num_testing_classes;
     
     % determine the no. of classes by counting the number of sub folders in
     % dir
@@ -127,6 +131,6 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     handles.constants('num_classes') = num_folders;
     
     % Initialise + Populate training data matrix
-    training_data = zeros(handles.constants('q'), handles.constants('num_training_imgs'), handles.constants('num_classes'));
-    training_data = learn_faces(directory_path, training_data, handles.constants('num_total_imgs'), handles.constants('num_training_imgs'), handles.constants('num_classes'), handles.constants('q'), handles.constants('c'), handles.constants('d'));
+    %training_data = zeros(handles.constants('q'), handles.constants('num_training_imgs'), handles.constants('num_classes'));
+    %training_data = learn_faces(directory_path, training_data, handles.constants('num_total_imgs'), handles.constants('num_training_imgs'), handles.constants('num_classes'), handles.constants('q'), handles.constants('c'), handles.constants('d'));
     

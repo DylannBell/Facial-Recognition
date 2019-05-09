@@ -72,6 +72,25 @@ function varargout = GUI_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
+
+% Populate training set with face data set
+function training_data = learn_faces(directory_path, training_data, num_total_imgs, num_training_imgs, num_classes, q, c, d)
+    for i = 1:num_classes
+        % Keep an array of all file names and image paths (training + learning)
+        image_paths = strings(1, num_total_imgs);
+
+        dir_name = strcat('s', num2str(i));
+
+        % Loop through all images and save image paths into an array
+        for j = 1:num_total_imgs
+            fileName = strcat(num2str(j), '.pgm');
+            path = strcat(directory_path, '\', dir_name, '\', fileName)
+            image_paths(1, j) = path;
+        end
+        
+        
+    end
+
 % SET CONSTANTS FOR GUI ENVIRONMENT
 % A number of constants need to be saved and readily available to functions
 % throughout this system, therefore add it as a field to handles
@@ -85,7 +104,7 @@ function handles = set_constants(handles, hObject)
                 'd',
                 'q'
                };
-    valueSet = {5, 3, 10, 10, 5, 50};
+    valueSet = {5, 10, 10, 10, 5, 50};
     constants = containers.Map(keySet, valueSet);
     handles.constants = constants;  
     guidata(hObject, handles);
@@ -98,10 +117,17 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     % initialise environment
     handles = set_constants(handles, hObject);
     
-    % open folder selection dialog box
-    directory_path = uigetdir();
+    % open folder selection dialog box and save path
+    testing_directory_path = uigetdir()
+    dir_content = dir(testing_directory_path);
     
-    % start training 
-    % Populate training data matrix
-    training_data = zeros(q, num_training_imgs, num_classes);
-    training_data = learn_faces(directory_path, handles.constants('training_data'), handles.constants('num_total_imgs'), handles.constants('num_training_imgs'), handles.constants('num_classes'), handles.constants('q'), handles.constants('c'), handles.constants('d'));
+    % determine the no. of classes by counting the number of sub folders in
+    % dir
+    %dir_content = dir(directory_path);
+    %num_folders = sum([dir_content.isdir]) - 2;
+    %handles.constants('num_classes') = num_folders;
+    
+    % Initialise + Populate training data matrix
+    %training_data = zeros(handles.constants('q'), handles.constants('num_training_imgs'), handles.constants('num_classes'));
+    %training_data = learn_faces(directory_path, training_data, handles.constants('num_total_imgs'), handles.constants('num_training_imgs'), handles.constants('num_classes'), handles.constants('q'), handles.constants('c'), handles.constants('d'));
+    
