@@ -112,7 +112,7 @@ function training_data = learn_faces(handles)
     num_training_classes = handles.constants('num_training_classes');
     num_training_imgs = handles.constants('num_training_imgs');
     
-    training_dir = dir("Training");
+    training_dir = dir("Training")
     
     for i = 1:num_training_classes
         
@@ -162,15 +162,17 @@ function test_faces(handles, testing_dir_path, training_data)
     num_testing_classes = handles.constants('num_testing_classes');
     num_training_classes = handles.constants('num_training_classes');
     
-    training_dir = dir("Training");
     testing_dir = dir(testing_dir_path);
     
     for i = 1:num_testing_classes
         
+        % Initialise testing image paths
+        testing_image_paths = strings(1, num_testing_imgs);
+        
         % Keep an array of all file names and image paths for training data
         testing_image_paths = strings(1, num_testing_imgs);
         
-        
+        % NEED TO CHANGE THIS TO BE S
         class_testing_dir = testing_dir(i+2).name;
 
         % Loop through all images and save image paths into an array
@@ -206,8 +208,7 @@ function test_faces(handles, testing_dir_path, training_data)
             fprintf("Index = " + min_index + "\n");
                         
             % Display Correct Image
-            %correct_img_path = "Training/" + strcat('s', num2str(min_index)) + '/1.pgm';
-            correct_img_path = "Training/" + training_dir(min_index+2).name + "/1.pgm"
+            correct_img_path = "Training/" + strcat('s', num2str(min_index)) + '/1.pgm';
             correct_img = imread(correct_img_path);
             imshow(correct_img, 'Parent', handles.axes2);
             
@@ -215,19 +216,19 @@ function test_faces(handles, testing_dir_path, training_data)
             handles.text7.String = min_value;
             
             % Display Recognition Accuracy
-            total_counter = handles.constants('total_counter');
-            correct_counter = handles.constants('correct_counter');
+            total_counter = handles.constants('total_counter')
+            correct_counter = handles.constants('correct_counter')
             
-            total_counter = total_counter + 1;
+            total_counter = total_counter + 1
             
-            if training_dir(min_index+2).name == class_testing_dir
-                correct_counter = correct_counter + 1;
+            if min_index == current_class_int
+                correct_counter = correct_counter + 1
             end
             
             handles.text8.String = num2str(correct_counter/total_counter);
             
-            handles.constants('total_counter') = total_counter;
-            handles.constants('correct_counter') = correct_counter;
+            handles.constants('total_counter') = total_counter
+            handles.constants('correct_counter') = correct_counter
            
             pause(0.2);  
         end
