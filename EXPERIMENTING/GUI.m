@@ -126,12 +126,20 @@ function training_data = learn_faces(handles)
 
         % Initialise the class_layer for the 5 training images Xi : (q * pi)
         class_layer = zeros(50, num_training_imgs);
-           
+        
+        % For each image in the training images class
         for j = 1:num_training_imgs
+            
             % Load the image and process it
             training_img = imread(char(image_paths(j)));
+            
+            % Append image to left hand screen
+            %handles.axes1 = training_img;
+            imshow(training_img, 'Parent', handles.axes1);
+            
             training_img = process_img(training_img, handles);
-
+            pause(500)
+            
             % Replace the ith column with the image
             % Load the 5 training images into Wi (need to change this to 
             % load into Xi after Wi.
@@ -197,10 +205,7 @@ function test_faces(handles, testing_dir_path, training_data)
             
             [min_value, min_index] = min(hats);
             fprintf("Index = " + min_index + "\n"); 
-            
-            
-            
-           
+                
         end
     end
     
@@ -211,8 +216,11 @@ function test_faces(handles, testing_dir_path, training_data)
 function pushbutton1_Callback(hObject, eventdata, handles)
     % initialise environment
     handles = set_constants(handles, hObject);
-    
 
+    % Open folder selection dialog box and save testing path
+    % Catch Error if no directory is chosen
+    testing_dir = uigetdir();
+    
     %%% TRAINING %%%%
     
     % Determine number of classes by counting the directories
@@ -228,14 +236,8 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     % Initialise + Populate training data matrix
     training_data = learn_faces(handles);
     
-    
-    
-    
     %%% TESTING %%%
-   
-    % Open folder selection dialog box and save testing path
-    testing_dir = uigetdir()
-    
+     
     % Count number of sub directories in testing dir
     testing_dir_content = dir(testing_dir);
     num_testing_classes = sum([testing_dir_content.isdir]) - 2;
