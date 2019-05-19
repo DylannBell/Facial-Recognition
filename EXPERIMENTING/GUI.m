@@ -1,10 +1,10 @@
-% Introduce threshold level?
 % Unhard code constants
-% Maybe figure out how to set pop up menu to start at 5
+% Maybe figure out how to set pop up menu to default at 5 instead of 1
 % Make more readable by seperating functionality into functions
-% When you close the dir without choosing a folder
-
-
+% Remove axes on the photo display thing
+% Change recognition accuracy to %
+% Make GUI a bit neater (say something when training is happening???)
+% Add comments 
 
 
 function varargout = GUI(varargin)
@@ -32,7 +32,7 @@ end
 % SET CONSTANTS FOR GUI ENVIRONMENT
 % A number of constants need to be saved and readily available to functions
 % throughout this system, therefore add it as a field to handles
-% Access constants like so - handles.constants('num_training_imgs') 
+% Access constants like so - handles.constants('num_training_imgs')
 function handles = set_constants(handles, hObject)
     
     keySet = {
@@ -212,42 +212,52 @@ function test_faces(handles, testing_dir_path, training_data)
                 hats(m) = dist;
             end
             
-            % PUT THIS BELOW INTO A NEW FUNCTION
-            
-            % Obtain where current photo is from
-            current_class_int = str2num(class_testing_dir(2));
             [min_value, min_index] = min(hats);
-            %fprintf("Class: " + current_class_int + ", Image: " + k);
-            %fprintf("Index = " + min_index + "\n");
-                        
-            % Display Correct Image
-            correct_img_path = "Training/" + training_dir(min_index+2).name;
-            correct_img_dir = dir(correct_img_path);
-            correct_img_name = correct_img_dir(3).name;
-            correct_img = imread(strcat(correct_img_path, '/', correct_img_name));
-            imshow(correct_img, 'Parent', handles.axes2);
             
-            % Display Y-Hat Value
-            handles.text7.String = min_value;
-            
-            % Display Recognition Accuracy
-            total_counter = handles.constants('total_counter');
-            correct_counter = handles.constants('correct_counter');
-            
-            total_counter = total_counter + 1;
-            
-            if strcmp(training_dir(min_index+2).name, class_testing_dir)
-                correct_counter = correct_counter + 1;
-            end
-            
-            handles.text8.String = num2str(correct_counter/total_counter);
-            
-            handles.constants('total_counter') = total_counter;
-            handles.constants('correct_counter') = correct_counter;
-           
-            pause(0.2);  
+            display_correct_image(handles, hats, training_dir);
+
+            display_recognition_accuracy(handles, training_dir, class_testing_dir, min_index);
+             
         end
     end
+    
+    
+function display_correct_image(handles, hats, training_dir)
+       
+    [min_value, min_index] = min(hats);
+    
+    % Display Correct Image
+    correct_img_path = "Training/" + training_dir(min_index+2).name;
+    correct_img_dir = dir(correct_img_path);
+    correct_img_name = correct_img_dir(3).name;
+    correct_img = imread(strcat(correct_img_path, '/', correct_img_name));
+    imshow(correct_img, 'Parent', handles.axes2);
+
+    % Display Y-Hat Value
+    handles.text7.String = min_value;
+
+    
+%
+function display_recognition_accuracy(handles, training_dir, class_testing_dir, min_index)
+    
+    total_counter = handles.constants('total_counter');
+    correct_counter = handles.constants('correct_counter');
+
+    total_counter = total_counter + 1;
+
+    if strcmp(training_dir(min_index+2).name, class_testing_dir)
+        correct_counter = correct_counter + 1;
+    end
+
+    handles.text8.String = num2str(correct_counter/total_counter);
+
+    handles.constants('total_counter') = total_counter;
+    handles.constants('correct_counter') = correct_counter;
+
+    pause(0.2);
+    
+    
+    
     
 % OPEN DIRECTORY BUTTON
 % Allows users to navigate to some directory where the system will 
@@ -261,6 +271,13 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     % Open folder selection dialog box and save testing path
     % Catch Error if no directory is chosen
     testing_dir = uigetdir();
+    
+    % Exit if no file chosen
+    if testing_dir == 0
+        handles.exit = true;
+        guidata(hObject, handles);
+        return
+    end
     
     
     %%% TRAINING %%%%
