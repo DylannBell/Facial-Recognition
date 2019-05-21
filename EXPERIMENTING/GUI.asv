@@ -307,6 +307,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     training_data = learn_faces(handles);
     
     %%% TESTING %%%
+    
     % Count number of sub directories in testing dir
     testing_dir_content = dir(testing_dir);
     num_testing_classes = sum([testing_dir_content.isdir]) - 2;
@@ -317,13 +318,13 @@ function pushbutton1_Callback(hObject, eventdata, handles)
     
 
     
-% Y-Hat display window
+% --- Executes during object creation, after setting all properties.
 function text7_CreateFcn(hObject, eventdata, handles)
 
-% Allows the user to input the number of training images - e.g. defines the
-% number of images to be used during training
+% --- Executes on selection change in popupmenu1.
 function popupmenu1_Callback(hObject, eventdata, handles)
 
+% --- Executes during object creation, after setting all properties.
 function popupmenu1_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
