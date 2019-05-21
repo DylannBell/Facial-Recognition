@@ -1,10 +1,3 @@
-% Unhard code constants
-% Make more readable by seperating functionality into functions
-% Change recognition accuracy to %
-% Make GUI a bit neater (say something when training is happening???)
-% Add comments 
-
-
 function varargout = GUI(varargin)
 
 % Begin initialization code - DO NOT EDIT
@@ -78,7 +71,7 @@ function GUI_OpeningFcn(hObject, eventdata, handles, varargin)
     set(handles.axes2, 'visible', 'off')
     
     % default pop up to 5
-    handles.popupmenu1.Value = 5
+    handles.popupmenu1.Value = 5;
     
     % UIWAIT makes GUI wait for user response (see UIRESUME)
     % uiwait(handles.figure1);
@@ -258,7 +251,7 @@ function display_recognition_accuracy(handles, training_dir, class_testing_dir, 
         correct_counter = correct_counter + 1;
     end
 
-    handles.text8.String = num2str(correct_counter/total_counter);
+    handles.text8.String = num2str(correct_counter/total_counter * 100);
 
     % append accuracy
     handles.constants('total_counter') = total_counter;
